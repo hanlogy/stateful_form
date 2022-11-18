@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stateful_form/src/delegate.dart';
+import 'package:stateful_form/src/state_delegate.dart';
 import 'package:stateful_form/src/text_field.dart';
 
 class UsernameField extends StatefulFormTextField {
@@ -32,90 +32,90 @@ void main() {
 
   test('validation and rerendering', () {
     var count = 0;
-    StatefulFormDelegate? delegate;
+    StatefulFormStateDelegate? formState;
 
-    delegate = StatefulFormDelegate(
+    formState = StatefulFormStateDelegate(
       fields: [
         UsernameField(controller: usernameController),
         PasswordField(controller: passwordController),
       ],
       rerender: expectAsync0(() {
-        delegate!;
+        formState!;
         switch (count++) {
           case 0:
-            expect(delegate.errorText<UsernameField>(), 'username_error');
-            expect(delegate.errorText<PasswordField>(), 'password_error');
-            expect(delegate.errorText(), null);
+            expect(formState.errorText<UsernameField>(), 'username_error');
+            expect(formState.errorText<PasswordField>(), 'password_error');
+            expect(formState.errorText(), null);
             break;
           case 1:
-            expect(delegate.errorText<UsernameField>(), null);
-            expect(delegate.errorText<PasswordField>(), null);
-            expect(delegate.errorText(), null);
+            expect(formState.errorText<UsernameField>(), null);
+            expect(formState.errorText<PasswordField>(), null);
+            expect(formState.errorText(), null);
             break;
           case 2:
-            expect(delegate.errorText<UsernameField>(), null);
-            expect(delegate.errorText<PasswordField>(), 'password_error');
-            expect(delegate.errorText(), null);
+            expect(formState.errorText<UsernameField>(), null);
+            expect(formState.errorText<PasswordField>(), 'password_error');
+            expect(formState.errorText(), null);
             break;
           case 3:
-            expect(delegate.errorText<UsernameField>(), null);
-            expect(delegate.errorText<PasswordField>(), null);
-            expect(delegate.errorText(), null);
+            expect(formState.errorText<UsernameField>(), null);
+            expect(formState.errorText<PasswordField>(), null);
+            expect(formState.errorText(), null);
             break;
         }
       }, count: 4),
     );
 
     expect(count, 0);
-    expect(delegate.errorText<UsernameField>(), null);
-    expect(delegate.errorText<PasswordField>(), null);
-    expect(delegate.errorText(), null);
+    expect(formState.errorText<UsernameField>(), null);
+    expect(formState.errorText<PasswordField>(), null);
+    expect(formState.errorText(), null);
 
-    expect(delegate.validate(), false);
+    expect(formState.validate(), false);
 
     usernameController.text = 'foo';
-    expect(delegate.validate(), false);
+    expect(formState.validate(), false);
 
     passwordController.text = '000';
-    expect(delegate.validate(), true);
+    expect(formState.validate(), true);
     expect(count, 4);
   });
 
   test('setError', () {
     var count = 0;
-    StatefulFormDelegate? delegate;
+    StatefulFormStateDelegate? formState;
 
-    delegate = StatefulFormDelegate(
+    formState = StatefulFormStateDelegate(
       fields: [
         UsernameField(controller: usernameController),
       ],
       rerender: expectAsync0(() {
-        delegate!;
+        formState!;
         switch (count++) {
           case 0:
-            expect(delegate.errorText<UsernameField>(), 'username_error');
-            expect(delegate.errorText(), null);
+            expect(formState.errorText<UsernameField>(), 'username_error');
+            expect(formState.errorText(), null);
             break;
           case 1:
-            expect(delegate.errorText<UsernameField>(), 'username_error');
-            expect(delegate.errorText(), 'generic_error');
+            expect(formState.errorText<UsernameField>(), 'username_error');
+            expect(formState.errorText(), 'generic_error');
             break;
           case 2:
-            expect(delegate.errorText<UsernameField>(), null);
-            expect(delegate.errorText(), null);
+            expect(formState.errorText<UsernameField>(), null);
+            expect(formState.errorText(), null);
             break;
           case 3:
-            expect(delegate.errorText<UsernameField>(), null);
-            expect(delegate.errorText(), 'generic_error');
+            expect(formState.errorText<UsernameField>(), null);
+            expect(formState.errorText(), 'generic_error');
             break;
         }
       }, count: 4),
     );
 
-    expect(delegate.validate(), false);
-    delegate.setError('generic_error');
+    expect(formState.validate(), false);
+    formState.setError('generic_error');
     usernameController.text = 'foo';
-    expect(delegate.validate(), true);
-    delegate.setError('generic_error');
+    expect(formState.validate(), true);
+    formState.setError('generic_error');
   });
 }

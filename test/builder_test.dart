@@ -32,7 +32,7 @@ void main() {
               UsernameField(controller: usernameController),
               PasswordField(controller: passwordController),
             ],
-            builder: (context, delegate) {
+            builder: (context, formState) {
               return Column(
                 children: [
                   TextField(

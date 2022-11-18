@@ -1,7 +1,7 @@
 import 'text_field.dart';
 
-class StatefulFormDelegate {
-  StatefulFormDelegate({
+class StatefulFormStateDelegate {
+  StatefulFormStateDelegate({
     required List<StatefulFormTextField> fields,
     required void Function() rerender,
   })  : _rerender = rerender,
