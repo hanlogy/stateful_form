@@ -1,6 +1,6 @@
 name: stateful_form
 description: A Flutter package to simplify form validation and state management.
-version: 0.1.0
+version: 0.2.0-dev
 homepage: https://github.com/hanlogy/stateful_form
 
 environment:

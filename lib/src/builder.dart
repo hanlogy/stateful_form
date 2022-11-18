@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'delegate.dart';
+import 'state_delegate.dart';
 import 'text_field.dart';
 
 class StatefulFormBuilder extends StatefulWidget {
@@ -8,25 +8,33 @@ class StatefulFormBuilder extends StatefulWidget {
     super.key,
     required this.builder,
     required this.fields,
+    this.builder2,
   });
 
   final Widget Function(
     BuildContext context,
-    StatefulFormDelegate delegate,
+    StatefulFormStateDelegate formState,
   ) builder;
+
+  final Widget Function(
+    BuildContext context,
+    StatefulFormStateDelegate formState,
+  )? builder2;
+
   final List<StatefulFormTextField> fields;
 
   @override
-  State<StatefulFormBuilder> createState() => _StatefulFormBuilder();
+  State<StatefulFormBuilder> createState() => StatefulFormBuilderA();
 }
 
-class _StatefulFormBuilder extends State<StatefulFormBuilder> {
-  late StatefulFormDelegate delegate;
+class StatefulFormBuilderA extends State<StatefulFormBuilder> {
+  var m = 2;
+  late StatefulFormStateDelegate stateDelegate;
 
   @override
   void initState() {
     super.initState();
-    delegate = StatefulFormDelegate(
+    stateDelegate = StatefulFormStateDelegate(
       fields: widget.fields,
       rerender: () => setState(() {}),
     );
@@ -34,6 +42,6 @@ class _StatefulFormBuilder extends State<StatefulFormBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, delegate);
+    return widget.builder(context, stateDelegate);
   }
 }

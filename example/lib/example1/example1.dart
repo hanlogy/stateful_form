@@ -1,57 +1,14 @@
-A Flutter package aims to simplify form validation and state management.
-
-<img src="https://raw.githubusercontent.com/hanlogy/stateful_form/master/doc/example.gif" alt="example" width="425">
-
-## Examples
-
-### Create a StatefulFormTextField
-
-```dart
-class UsernameField extends StatefulFormTextField {
-  const UsernameField({required super.controller});
-
-  @override
-  String? validate() {
-    return value.isNotEmpty ? null : 'Username cannot be empty';
-  }
-}
-
-UsernameField(controller: TextEditingController());
-```
-
-### Entire application with StatefulFormBuilder
-
-```dart
 import 'package:flutter/material.dart';
 import 'package:stateful_form/stateful_form.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Example1 extends StatefulWidget {
+  const Example1({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(),
-    );
-  }
+  State<Example1> createState() => _Example1State();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _Example1State extends State<Example1> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -66,7 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var count = 0;
     return Scaffold(
-      appBar: AppBar(title: const Text('Demo')),
+      appBar: AppBar(title: const Text('Example 1')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: StatefulFormBuilder(
@@ -107,7 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       }
 
                       if (count++ == 0) {
-                        formState.setError('Something wrong, please try again.');
+                        formState
+                            .setError('Something wrong, please try again.');
                         return;
                       }
 
@@ -145,7 +103,7 @@ class UsernameField extends StatefulFormTextField {
 
   @override
   String? validate() {
-    return (value.isNotEmpty) ? null : 'Username cannot be empty';
+    return value.isNotEmpty ? null : 'Username cannot be empty';
   }
 }
 
@@ -170,4 +128,3 @@ class PasswordField extends StatefulFormTextField {
     return null;
   }
 }
-```
