@@ -24,17 +24,16 @@ class StatefulFormBuilder extends StatefulWidget {
   final List<StatefulFormTextField> fields;
 
   @override
-  State<StatefulFormBuilder> createState() => StatefulFormBuilderA();
+  State<StatefulFormBuilder> createState() => _StatefulFormBuilderState();
 }
 
-class StatefulFormBuilderA extends State<StatefulFormBuilder> {
-  var m = 2;
-  late StatefulFormStateDelegate stateDelegate;
+class _StatefulFormBuilderState extends State<StatefulFormBuilder> {
+  late StatefulFormStateDelegate _stateDelegate;
 
   @override
   void initState() {
     super.initState();
-    stateDelegate = StatefulFormStateDelegate(
+    _stateDelegate = StatefulFormStateDelegate(
       fields: widget.fields,
       rerender: () => setState(() {}),
     );
@@ -42,6 +41,6 @@ class StatefulFormBuilderA extends State<StatefulFormBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, stateDelegate);
+    return widget.builder(context, _stateDelegate);
   }
 }
