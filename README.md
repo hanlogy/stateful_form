@@ -19,6 +19,31 @@ class UsernameField extends StatefulFormTextField {
 UsernameField(controller: TextEditingController());
 ```
 
+### Create a StatefulForm
+
+```dart
+final form = StatefulForm(fields: [
+  UsernameField(controller: TextEditingController(text: 'username')),
+  PasswordField(controller: TextEditingController(text: 'password')),
+]);
+
+print(form.value);
+// Output: {UsernameField: 'username', PasswordField: 'password'}
+
+print(form.valueOf(UsernameField));
+// Output: 'username'
+
+print(form.validate());
+
+class UsernameField extends StatefulFormTextField {
+  const UsernameField({required super.controller});
+}
+
+class PasswordField extends StatefulFormTextField {
+  const PasswordField({required super.controller});
+}
+```
+
 ### Entire application with StatefulFormBuilder
 
 ```dart
