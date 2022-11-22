@@ -11,11 +11,22 @@ class Example1 extends StatefulWidget {
 class _Example1State extends State<Example1> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _form = StatefulForm();
+
+  @override
+  void initState() {
+    super.initState();
+    _form.fields = [
+      UsernameField(controller: _usernameController),
+      PasswordField(controller: _passwordController),
+    ];
+  }
 
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
+    _form.dispose();
     super.dispose();
   }
 
@@ -27,18 +38,15 @@ class _Example1State extends State<Example1> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: StatefulFormBuilder(
-          fields: [
-            UsernameField(controller: _usernameController),
-            PasswordField(controller: _passwordController),
-          ],
-          builder: (context, formState) {
+          form: _form,
+          builder: (context, state, child) {
             return Column(
               children: [
                 TextField(
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
-                    errorText: formState.errorText<UsernameField>(),
+                    errorText: state.errorText<UsernameField>(),
                   ),
                 ),
                 TextField(
@@ -46,7 +54,7 @@ class _Example1State extends State<Example1> {
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    errorText: formState.errorText<PasswordField>(),
+                    errorText: state.errorText<PasswordField>(),
                   ),
                 ),
                 Container(
@@ -54,18 +62,17 @@ class _Example1State extends State<Example1> {
                   width: 200,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (!formState.validate()) {
+                      if (!_form.validate()) {
                         return;
                       }
 
                       if (_passwordController.text == '00000000') {
-                        formState.setError<PasswordField>('Wrong password');
+                        _form.setError<PasswordField>('Wrong password');
                         return;
                       }
 
                       if (count++ == 0) {
-                        formState
-                            .setError('Something wrong, please try again.');
+                        _form.setError('Something wrong, please try again.');
                         return;
                       }
 
@@ -80,10 +87,10 @@ class _Example1State extends State<Example1> {
                     child: const Text('Login'),
                   ),
                 ),
-                if (formState.errorText() != null) ...[
+                if (state.errorText() != null) ...[
                   const SizedBox(height: 10),
                   Text(
-                    formState.errorText()!,
+                    state.errorText()!,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: Colors.red),
                   ),

@@ -25,40 +25,32 @@ UsernameField(controller: TextEditingController());
 import 'package:flutter/material.dart';
 import 'package:stateful_form/stateful_form.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Example extends StatefulWidget {
+  const Example({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(),
-    );
-  }
+  State<Example> createState() => _ExampleState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _ExampleState extends State<Example> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _form = StatefulForm();
+
+  @override
+  void initState() {
+    super.initState();
+    _form.fields = [
+      UsernameField(controller: _usernameController),
+      PasswordField(controller: _passwordController),
+    ];
+  }
 
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
+    _form.dispose();
     super.dispose();
   }
 
@@ -66,22 +58,19 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var count = 0;
     return Scaffold(
-      appBar: AppBar(title: const Text('Demo')),
+      appBar: AppBar(title: const Text('Example')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: StatefulFormBuilder(
-          fields: [
-            UsernameField(controller: _usernameController),
-            PasswordField(controller: _passwordController),
-          ],
-          builder: (context, formState) {
+          form: _form,
+          builder: (context, state, child) {
             return Column(
               children: [
                 TextField(
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
-                    errorText: formState.errorText<UsernameField>(),
+                    errorText: state.errorText<UsernameField>(),
                   ),
                 ),
                 TextField(
@@ -89,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    errorText: formState.errorText<PasswordField>(),
+                    errorText: state.errorText<PasswordField>(),
                   ),
                 ),
                 Container(
@@ -97,17 +86,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 200,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (!formState.validate()) {
+                      if (!_form.validate()) {
                         return;
                       }
 
                       if (_passwordController.text == '00000000') {
-                        formState.setError<PasswordField>('Wrong password');
+                        _form.setError<PasswordField>('Wrong password');
                         return;
                       }
 
                       if (count++ == 0) {
-                        formState.setError('Something wrong, please try again.');
+                        _form.setError('Something wrong, please try again.');
                         return;
                       }
 
@@ -122,10 +111,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: const Text('Login'),
                   ),
                 ),
-                if (formState.errorText() != null) ...[
+                if (state.errorText() != null) ...[
                   const SizedBox(height: 10),
                   Text(
-                    formState.errorText()!,
+                    state.errorText()!,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: Colors.red),
                   ),
@@ -145,7 +134,7 @@ class UsernameField extends StatefulFormTextField {
 
   @override
   String? validate() {
-    return (value.isNotEmpty) ? null : 'Username cannot be empty';
+    return value.isNotEmpty ? null : 'Username cannot be empty';
   }
 }
 
@@ -170,4 +159,5 @@ class PasswordField extends StatefulFormTextField {
     return null;
   }
 }
+
 ```

@@ -1,5 +1,5 @@
 library stateful_form;
 
-export 'src/builder.dart';
-export 'src/state_delegate.dart';
+export 'src/state.dart';
 export 'src/text_field.dart';
+export 'src/stateful_form.dart';
