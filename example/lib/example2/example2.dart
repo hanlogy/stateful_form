@@ -24,29 +24,45 @@ class ExampleView extends StatefulWidget {
 class _ExampleViewState extends State<ExampleView> {
   final _nameController = TextEditingController();
 
+  late StatefulForm _form;
+  @override
+  void initState() {
+    super.initState();
+    _form = StatefulForm(
+      fields: [
+        NameField(controller: _nameController),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _form.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Example 2')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: StatefulFormBuilder(
-          fields: [
-            NameField(controller: _nameController),
-          ],
-          builder: (context, formState) {
-            return BlocListener<SimpleCubit, String>(
-              listener: (context, state) {
-                if (state == 'submit') {
-                  formState.setError<NameField>('Error');
-                }
-              },
-              child: Column(
+        child: BlocListener<SimpleCubit, String>(
+          listener: (context, state) {
+            if (state == 'submit') {
+              _form.setError<NameField>('Error');
+            }
+          },
+          child: StatefulFormBuilder(
+            form: _form,
+            builder: (context, value, child) {
+              return Column(
                 children: <Widget>[
                   TextField(
                     controller: _nameController,
                     decoration: InputDecoration(
-                      errorText: formState.errorText<NameField>(),
+                      errorText: value.errorText<NameField>(),
                     ),
                   ),
                   Container(
@@ -60,9 +76,9 @@ class _ExampleViewState extends State<ExampleView> {
                     ),
                   ),
                 ],
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
