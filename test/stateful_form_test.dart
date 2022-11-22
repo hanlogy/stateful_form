@@ -36,6 +36,24 @@ void main() {
     form.dispose();
   });
 
+  test('fields must be unique', () {
+    expect(() {
+      form.fields = [
+        UsernameField(controller: usernameController),
+        UsernameField(controller: usernameController),
+      ];
+    }, throwsAssertionError);
+  });
+
+  test('value, valueOf', () {
+    usernameController.text = 'foo';
+    passwordController.text = '000';
+
+    expect(form.value, {UsernameField: 'foo', PasswordField: '000'});
+    expect(form.valueOf(UsernameField), 'foo');
+    expect(form.valueOf(PasswordField), '000');
+  });
+
   testWidgets('StatefulFormBuilder', (tester) async {
     await tester.pumpWidget(
       MaterialApp(

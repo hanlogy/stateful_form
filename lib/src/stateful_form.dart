@@ -9,14 +9,21 @@ class StatefulForm {
     List<StatefulFormTextField> fields = const [],
   }) {
     if (fields.isNotEmpty) {
-      _fields.addAll(fields);
+      this.fields = fields;
     }
   }
 
   final List<StatefulFormTextField> _fields = [];
 
-  set fields(List<StatefulFormTextField> list) =>
-      _fields.replaceRange(0, _fields.length, [...list]);
+  set fields(List<StatefulFormTextField> list) {
+    for (final item in list) {
+      assert(
+        list.where((e) => e.runtimeType == item.runtimeType).length == 1,
+        'All StatefulFormTextField must be unique',
+      );
+    }
+    _fields.replaceRange(0, _fields.length, [...list]);
+  }
 
   final _notifier = ValueNotifier<StatefulFormState>(const StatefulFormState());
   final Map<String, String?> _errors = {};
@@ -30,13 +37,17 @@ class StatefulForm {
 
   /// Validates the given [fields]. It will validate all the fields if there is
   /// no given [fields].
-  bool validate([List<StatefulFormTextField>? fields]) {
+  bool validate([List<Type>? fieldTypes]) {
     if (_errors.isNotEmpty) {
       _errors.clear();
       _emitErrors();
     }
 
-    for (final field in fields ?? _fields) {
+    final fields = fieldTypes == null
+        ? _fields
+        : _fields.where((e) => fieldTypes.contains(e.runtimeType));
+
+    for (final field in fields) {
       final result = field.validate();
       if (result != null) {
         _errors[field.runtimeType.toString()] = result;
@@ -50,6 +61,15 @@ class StatefulForm {
     _emitErrors();
     return false;
   }
+
+  /// Returns values of all fields.
+  Map<Type, String> get value => {
+        for (final field in _fields) field.runtimeType: field.value,
+      };
+
+  /// Returns value of the given [fieldType].
+  String valueOf(Type fieldType) =>
+      _fields.firstWhere((e) => e.runtimeType == fieldType).value;
 
   void _emitErrors() {
     _notifier.value = _notifier.value.copyWith(errors: {..._errors});
