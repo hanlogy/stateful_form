@@ -4,7 +4,7 @@ A Flutter package aims to simplify form validation and state management.
 
 ## Examples
 
-### Create a StatefulFormTextField
+### Define a StatefulFormTextField
 
 ```dart
 class UsernameField extends StatefulFormTextField {
@@ -19,32 +19,125 @@ class UsernameField extends StatefulFormTextField {
 UsernameField(controller: TextEditingController());
 ```
 
-### Create a StatefulForm
+### Create a StatefulForm and initialize fields
 
 ```dart
 final form = StatefulForm(fields: [
   UsernameField(controller: TextEditingController(text: 'username')),
   PasswordField(controller: TextEditingController(text: 'password')),
 ]);
+```
 
-print(form.value);
-// Output: {UsernameField: 'username', PasswordField: 'password'}
+Or
 
-print(form.valueOf<UsernameField>());
-// Output: 'username'
+```dart
+final form = StatefulForm();
 
-print(form.validate());
+form.fields = [
+  UsernameField(controller: TextEditingController(text: 'username')),
+  PasswordField(controller: TextEditingController(text: 'password')),
+];
+```
 
-class UsernameField extends StatefulFormTextField {
-  const UsernameField({required super.controller});
+### Validate
+
+```dart
+final newPasswordController = TextEditingController();
+final confirmNewPasswordController = TextEditingController();
+
+final form = StatefulForm(fields: [
+  NewPasswordField(controller: newPasswordController);
+  ConfirmPasswordField(
+    controller: confirmNewPasswordController,
+    matcher: newPasswordController,
+  );
+]);
+
+// Validate all fields.
+form.validate();
+
+// Validate specific fields.
+form.validate([ConfirmPasswordField]);
+
+
+// Fields definition.
+class NewPasswordField extends StatefulFormTextField {
+  const NewPasswordField({required super.controller});
+
+  @override
+  String? validate() {
+    return value.isNotEmpty ? null : 'Please enter new password';
+  }
 }
 
-class PasswordField extends StatefulFormTextField {
-  const PasswordField({required super.controller});
+class ConfirmPasswordField extends StatefulFormTextField {
+  const ConfirmPasswordField({
+    required super.controller,
+    required this.matcher,
+  });
+
+  final TextEditingController matcher;
+
+  @override
+  String? validate() {
+    if (value.isNotEmpty) {
+      return 'Please enter confirm password';
+    }
+
+    if (value != matcher.text) {
+      return 'Confirm password does not match the new password';
+    }
+
+    return null;
+  }
 }
 ```
 
-### Entire application with StatefulFormBuilder
+### StatefulFormBuilder and error rendering.
+
+```dart
+StatefulFormBuilder(
+  form: form,
+  builder: (context, formState, child) {
+    return Column(
+      children: [
+        TextField(
+          ...
+          decoration: InputDecoration(
+            errorText: formState.errorText<UsernameField>(),
+          ),
+        ),
+        // Generic error text.
+        Text(formState.errorText()??''),
+      ],
+    );
+  },
+);
+```
+
+### Set error manually
+
+```dart
+final form = StatefulForm(fields: [...]);
+
+// Set error for UsernameField.
+form.setError<UsernameField>('This username has been taken');
+
+// Set generic error.
+form.setError('Our server is crashed');
+```
+
+### Other apis.
+
+```dart
+// Values of all fields.
+form.value
+
+// Value of a given type.
+form.valueOf<UsernameField>()
+```
+
+### An entire application example.
 
 ```dart
 import 'package:flutter/material.dart';
