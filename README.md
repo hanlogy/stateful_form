@@ -30,7 +30,7 @@ final form = StatefulForm(fields: [
 print(form.value);
 // Output: {UsernameField: 'username', PasswordField: 'password'}
 
-print(form.valueOf(UsernameField));
+print(form.valueOf<UsernameField>());
 // Output: 'username'
 
 print(form.validate());

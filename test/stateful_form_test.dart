@@ -50,8 +50,8 @@ void main() {
     passwordController.text = '000';
 
     expect(form.value, {UsernameField: 'foo', PasswordField: '000'});
-    expect(form.valueOf(UsernameField), 'foo');
-    expect(form.valueOf(PasswordField), '000');
+    expect(form.valueOf<UsernameField>(), 'foo');
+    expect(form.valueOf<PasswordField>(), '000');
   });
 
   testWidgets('StatefulFormBuilder', (tester) async {

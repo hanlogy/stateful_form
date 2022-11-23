@@ -67,9 +67,8 @@ class StatefulForm {
         for (final field in _fields) field.runtimeType: field.value,
       };
 
-  /// Returns value of the given [fieldType].
-  String valueOf(Type fieldType) =>
-      _fields.firstWhere((e) => e.runtimeType == fieldType).value;
+  /// Returns the value of the given type [T].
+  String valueOf<T>() => _fields.firstWhere((e) => e.runtimeType == T).value;
 
   void _emitErrors() {
     _notifier.value = _notifier.value.copyWith(errors: {..._errors});
