@@ -31,6 +31,12 @@ class StatefulForm {
     _fields.add(field);
   }
 
+  void addFieldIfAbsent(StatefulFormTextField field) {
+    if (_fields.contains(field) == false) {
+      _fields.add(field);
+    }
+  }
+
   final _notifier = ValueNotifier<StatefulFormState>(const StatefulFormState());
   final Map<String, String?> _errors = {};
 

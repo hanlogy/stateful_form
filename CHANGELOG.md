@@ -1,3 +1,7 @@
+## 0.4.4
+
+- Add an `addFieldIfAbsent` method to `StatefulForm`.
+
 ## 0.4.3
 
 - Add an `fieldOfNullable` method to `StatefulForm`.
