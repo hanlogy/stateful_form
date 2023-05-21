@@ -68,7 +68,17 @@ class StatefulForm {
       };
 
   /// Returns the value of the given type [T].
-  String valueOf<T>() => _fields.firstWhere((e) => e.runtimeType == T).value;
+  ///
+  /// The type [T] field must be added to the form, otherwise it will return
+  /// `null`.
+  String? valueOf<T>() {
+    final fieldIndex = _fields.indexWhere((e) => e.runtimeType == T);
+    if (fieldIndex == -1) {
+      return null;
+    }
+
+    return _fields[fieldIndex].value;
+  }
 
   void _emitErrors() {
     _notifier.value = _notifier.value.copyWith(errors: {..._errors});
