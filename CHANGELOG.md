@@ -1,3 +1,7 @@
+## 0.4.1
+
+- Add an `addField` method to `StatefulForm`.
+
 ## 0.4.0
 
 - Change `StatefulForm.valueOf()` to return only non-null values.
@@ -14,7 +18,7 @@
 
 ## 0.2.1
 
-- Add `value` and `valueOf` for `StatefulForm`.
+- Add `value` and `valueOf` to `StatefulForm`.
 
 ## 0.2.0
 
