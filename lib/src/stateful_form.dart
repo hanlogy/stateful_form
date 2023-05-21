@@ -80,6 +80,9 @@ class StatefulForm {
     return _fields[fieldIndex].value;
   }
 
+  /// Same as [valueOf], but returns [defaultValue] if the value is `null`.
+  String valueOr<T>([String defaultValue = '']) => valueOf<T>() ?? defaultValue;
+
   void _emitErrors() {
     _notifier.value = _notifier.value.copyWith(errors: {..._errors});
   }

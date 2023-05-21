@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Add a `StatefulForm.valueOr()` method.
+
 ## 0.3.0
 
 - Upgrade SDK to `'>=2.18.4 <4.0.0`.
