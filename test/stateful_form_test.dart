@@ -58,8 +58,8 @@ void main() {
     expect(form.valueOf<PasswordField>(), '000');
   });
 
-  test('valueOf can return null', () {
-    expect(form.valueOf<NameField>(), null);
+  test('valueOfOrNull', () {
+    expect(form.valueOfOrNull<NameField>(), null);
   });
 
   testWidgets('StatefulFormBuilder', (tester) async {
