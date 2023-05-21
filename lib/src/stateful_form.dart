@@ -25,6 +25,12 @@ class StatefulForm {
     _fields.replaceRange(0, _fields.length, [...list]);
   }
 
+  void addField(StatefulFormTextField field) {
+    assert(_fields.contains(field) == false, 'Field already exists');
+
+    _fields.add(field);
+  }
+
   final _notifier = ValueNotifier<StatefulFormState>(const StatefulFormState());
   final Map<String, String?> _errors = {};
 
