@@ -59,7 +59,7 @@ void main() {
   });
 
   test('valueOfOrNull', () {
-    expect(form.valueOrNull<NameField>(), null);
+    expect(form.valueOfNullable<NameField>(), null);
   });
 
   testWidgets('StatefulFormBuilder', (tester) async {
