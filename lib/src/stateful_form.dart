@@ -88,6 +88,9 @@ class StatefulForm {
 
   String valueOf<T extends StatefulFormTextField>() => valueOfNullable<T>()!;
 
+  T fieldOf<T extends StatefulFormTextField>() =>
+      _fields.firstWhere((e) => e.runtimeType == T) as T;
+
   void _emitErrors() {
     _notifier.value = _notifier.value.copyWith(errors: {..._errors});
   }
