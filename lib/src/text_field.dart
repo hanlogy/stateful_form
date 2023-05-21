@@ -2,13 +2,13 @@ import 'package:flutter/widgets.dart';
 
 abstract class StatefulFormTextField<T extends TextEditingController> {
   const StatefulFormTextField({
-    required T controller,
-  }) : _controller = controller;
+    required this.controller,
+  });
 
-  final T _controller;
+  final T controller;
 
   /// Text value of current field.
-  String get value => _controller.text;
+  String get value => controller.text;
 
   /// Validates current field.
   ///

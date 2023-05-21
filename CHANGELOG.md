@@ -1,3 +1,7 @@
+## 0.4.2
+
+- Add an `fieldOf` method to `StatefulForm`.
+
 ## 0.4.1
 
 - Add an `addField` method to `StatefulForm`.
