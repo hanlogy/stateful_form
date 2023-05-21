@@ -91,6 +91,15 @@ class StatefulForm {
   T fieldOf<T extends StatefulFormTextField>() =>
       _fields.firstWhere((e) => e.runtimeType == T) as T;
 
+  T? fieldOfNullable<T extends StatefulFormTextField>() {
+    final fieldIndex = _fields.indexWhere((e) => e.runtimeType == T);
+    if (fieldIndex == -1) {
+      return null;
+    }
+
+    return _fields[fieldIndex] as T;
+  }
+
   void _emitErrors() {
     _notifier.value = _notifier.value.copyWith(errors: {..._errors});
   }
