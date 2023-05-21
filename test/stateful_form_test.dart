@@ -16,6 +16,10 @@ class PasswordField extends StatefulFormTextField {
   String? validate() => value.isEmpty ? 'password_error' : null;
 }
 
+class NameField extends StatefulFormTextField {
+  NameField({required super.controller});
+}
+
 void main() {
   late TextEditingController usernameController;
   late TextEditingController passwordController;
@@ -52,6 +56,10 @@ void main() {
     expect(form.value, {UsernameField: 'foo', PasswordField: '000'});
     expect(form.valueOf<UsernameField>(), 'foo');
     expect(form.valueOf<PasswordField>(), '000');
+  });
+
+  test('valueOf can return null', () {
+    expect(form.valueOf<NameField>(), null);
   });
 
   testWidgets('StatefulFormBuilder', (tester) async {
