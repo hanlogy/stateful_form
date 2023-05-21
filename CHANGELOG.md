@@ -1,3 +1,8 @@
+## 0.4.0
+
+- Change `StatefulForm.valueOf()` to return only non-null values.
+- Add `StatefulForm.valueOrNull()` method which allows `null` values.
+
 ## 0.3.1
 
 - Add a `StatefulForm.valueOr()` method.

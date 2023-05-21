@@ -71,7 +71,7 @@ class StatefulForm {
   ///
   /// The type [T] field must be added to the form, otherwise it will return
   /// `null`.
-  String? valueOfOrNull<T extends StatefulFormTextField>() {
+  String? valueOrNull<T extends StatefulFormTextField>() {
     final fieldIndex = _fields.indexWhere((e) => e.runtimeType == T);
     if (fieldIndex == -1) {
       return null;
@@ -80,7 +80,7 @@ class StatefulForm {
     return _fields[fieldIndex].value;
   }
 
-  String valueOf<T extends StatefulFormTextField>() => valueOfOrNull<T>()!;
+  String valueOf<T extends StatefulFormTextField>() => valueOrNull<T>()!;
 
   void _emitErrors() {
     _notifier.value = _notifier.value.copyWith(errors: {..._errors});
