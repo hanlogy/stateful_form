@@ -1,3 +1,7 @@
+## 0.4.3
+
+- Add an `fieldOfNullable` method to `StatefulForm`.
+
 ## 0.4.2
 
 - Add an `fieldOf` method to `StatefulForm`.
