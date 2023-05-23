@@ -59,6 +59,8 @@ class StatefulForm {
         ? _fields
         : _fields.where((e) => fieldTypes.contains(e.runtimeType));
 
+    assert(fields.isNotEmpty, 'No fields found');
+
     for (final field in fields) {
       final result = field.validate();
       if (result != null) {
