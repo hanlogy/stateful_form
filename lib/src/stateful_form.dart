@@ -59,6 +59,8 @@ class StatefulForm {
         ? _fields
         : _fields.where((e) => fieldTypes.contains(e.runtimeType));
 
+    assert(fields.isNotEmpty, 'No fields found');
+
     for (final field in fields) {
       final result = field.validate();
       if (result != null) {
@@ -93,6 +95,9 @@ class StatefulForm {
   }
 
   String valueOf<T extends StatefulFormTextField>() => valueOfNullable<T>()!;
+
+  bool hasField<T extends StatefulFormTextField>() =>
+      _fields.any((e) => e.runtimeType == T);
 
   T fieldOf<T extends StatefulFormTextField>() =>
       _fields.firstWhere((e) => e.runtimeType == T) as T;
