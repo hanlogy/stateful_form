@@ -1,3 +1,8 @@
+## 0.4.5
+
+- Do not allow fields to be empty in `StatefulForm.validate` method.
+- Add a `hasField` method to `StatefulForm`.
+
 ## 0.4.4
 
 - Add an `addFieldIfAbsent` method to `StatefulForm`.
