@@ -3,17 +3,21 @@ import 'package:flutter/widgets.dart';
 import 'state.dart';
 import 'text_field.dart';
 
+typedef StatefulFormOnChanged = void Function(StatefulFormTextField field);
+
 /// Creates a [StatefulForm].
 class StatefulForm {
   StatefulForm({
     List<StatefulFormTextField> fields = const [],
-  }) {
+    StatefulFormOnChanged? onChanged,
+  }) : _onChanged = onChanged {
     if (fields.isNotEmpty) {
       this.fields = fields;
     }
   }
 
   final List<StatefulFormTextField> _fields = [];
+  StatefulFormOnChanged? _onChanged;
 
   set fields(List<StatefulFormTextField> list) {
     for (final item in list) {
@@ -23,18 +27,37 @@ class StatefulForm {
       );
     }
     _fields.replaceRange(0, _fields.length, [...list]);
+    list.forEach(_bindListener);
+  }
+
+  /// Sets a callback that will be called when any field changes.
+  ///
+  /// **Warning:** This setter will override the previous one.
+  set onChanged(StatefulFormOnChanged onChanged) => _onChanged = onChanged;
+
+  void _addField(StatefulFormTextField field) {
+    _fields.add(field);
+    _bindListener(field);
   }
 
   void addField(StatefulFormTextField field) {
     assert(_fields.contains(field) == false, 'Field already exists');
 
-    _fields.add(field);
+    _addField(field);
   }
 
   void addFieldIfAbsent(StatefulFormTextField field) {
     if (_fields.contains(field) == false) {
-      _fields.add(field);
+      _addField(field);
     }
+  }
+
+  void _bindListener(StatefulFormTextField field) {
+    field.controller.addListener(() {
+      if (_onChanged != null) {
+        _onChanged!(field);
+      }
+    });
   }
 
   final _notifier = ValueNotifier<StatefulFormState>(const StatefulFormState());
