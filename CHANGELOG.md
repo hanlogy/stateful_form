@@ -1,3 +1,7 @@
+## 0.4.6
+
+- Add an ` onChanged` listener to `StatefulForm`.
+
 ## 0.4.5
 
 - Do not allow fields to be empty in `StatefulForm.validate` method.
