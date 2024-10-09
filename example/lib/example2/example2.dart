@@ -54,9 +54,9 @@ class _ExampleViewState extends State<ExampleView> {
               _form.setError<NameField>('Error');
             }
           },
-          child: StatefulFormBuilder(
+          child: StatefulFormConsumer(
             form: _form,
-            builder: (context, value, child) {
+            builder: (context, value) {
               return Column(
                 children: <Widget>[
                   TextField(
@@ -77,6 +77,13 @@ class _ExampleViewState extends State<ExampleView> {
                   ),
                 ],
               );
+            },
+            listener: (context, state) {
+              final snackBar = SnackBar(
+                content: Text(state.errorText<NameField>().toString()),
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
           ),
         ),

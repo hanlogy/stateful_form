@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stateful_form/src/state.dart';
+import 'package:stateful_form/src/stateful_form.dart';
 
 void main() {
   group('comparison', () {
