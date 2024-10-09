@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-
-import 'text_field.dart';
+part of 'stateful_form.dart';
 
 /// The state of a stateful form.
 class StatefulFormState {
@@ -19,13 +16,14 @@ class StatefulFormState {
       );
 
   /// Returns the error text for [T].
+  /// It will return a generic error message if [T] is not found.
   String? errorText<T extends StatefulFormTextField>() {
     return _errors[T.toString()];
   }
 
   @override
   String toString() => jsonEncode({
-        'errors': jsonEncode(_errors),
+        'errors': _errors,
       });
 
   @override

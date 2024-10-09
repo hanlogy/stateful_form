@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+part of 'stateful_form.dart';
 
 abstract class StatefulFormTextField<T extends TextEditingController> {
   const StatefulFormTextField({

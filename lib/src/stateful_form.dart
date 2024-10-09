@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
 
-import 'state.dart';
-import 'text_field.dart';
-
-typedef StatefulFormOnChanged = void Function(StatefulFormTextField field);
+part 'types.dart';
+part 'text_field.dart';
+part 'state.dart';
+part 'stateful_form_consumers.dart';
 
 /// Creates a [StatefulForm].
 class StatefulForm {
@@ -141,14 +144,4 @@ class StatefulForm {
   void dispose() {
     _notifier.dispose();
   }
-}
-
-/// Creates a StatefulForm widget.
-class StatefulFormBuilder extends ValueListenableBuilder<StatefulFormState> {
-  StatefulFormBuilder({
-    required StatefulForm form,
-    required super.builder,
-    super.child,
-    super.key,
-  }) : super(valueListenable: form._notifier);
 }

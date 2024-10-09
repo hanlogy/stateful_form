@@ -39,7 +39,7 @@ class _Example1State extends State<Example1> {
         padding: const EdgeInsets.all(20),
         child: StatefulFormBuilder(
           form: _form,
-          builder: (context, state, child) {
+          builder: (context, state) {
             return Column(
               children: [
                 TextField(
