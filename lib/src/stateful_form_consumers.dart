@@ -1,14 +1,23 @@
 part of 'stateful_form.dart';
 
+typedef StatefulFormListenWhen = bool Function(
+    StatefulFormState previous, StatefulFormState current);
+
+typedef StatefulFormBuildWhen = StatefulFormListenWhen;
+
+/// A widget that listens to a [StatefulForm] and rebuilds when the form state
+/// changes.
 class StatefulFormBuilder extends StatefulWidget {
   const StatefulFormBuilder({
     super.key,
     required this.form,
     required this.builder,
+    this.buildWhen,
   });
 
   final StatefulForm form;
   final Widget Function(BuildContext context, StatefulFormState state) builder;
+  final StatefulFormBuildWhen? buildWhen;
 
   @override
   State<StatefulFormBuilder> createState() => _StatefulFormBuilderState();
@@ -26,22 +35,27 @@ class _StatefulFormBuilderState extends State<StatefulFormBuilder> {
           formState = state;
         });
       },
+      listenWhen: widget.buildWhen,
       child: widget.builder(context, formState),
     );
   }
 }
 
+/// A widget that listens to a [StatefulForm] and calls a callback when the form
+/// state changes.
 class StatefulFormListener extends StatefulWidget {
   const StatefulFormListener({
     super.key,
     required this.form,
     required this.listener,
     required this.child,
+    this.listenWhen,
   });
 
   final StatefulForm form;
   final Widget child;
   final void Function(BuildContext context, StatefulFormState state) listener;
+  final StatefulFormListenWhen? listenWhen;
 
   @override
   State<StatefulFormListener> createState() => _StatefulFormListenerState();
@@ -49,6 +63,8 @@ class StatefulFormListener extends StatefulWidget {
 
 class _StatefulFormListenerState extends State<StatefulFormListener> {
   late final _notifier = widget.form._notifier;
+  late StatefulFormState _currentState;
+  late StatefulFormState _previousState;
 
   @override
   void initState() {
@@ -58,7 +74,11 @@ class _StatefulFormListenerState extends State<StatefulFormListener> {
   }
 
   void _onStateChanged() {
-    widget.listener(context, _notifier.value);
+    _currentState = _notifier.value;
+    if (widget.listenWhen?.call(_previousState, _currentState) ?? true) {
+      widget.listener(context, _currentState);
+    }
+    _previousState = _currentState;
   }
 
   @override
@@ -73,26 +93,33 @@ class _StatefulFormListenerState extends State<StatefulFormListener> {
   }
 }
 
+/// The combination of [StatefulFormListener] and [StatefulFormBuilder].
 class StatefulFormConsumer extends StatelessWidget {
   const StatefulFormConsumer({
     super.key,
     required this.form,
     required this.listener,
     required this.builder,
+    this.listenWhen,
+    this.buildWhen,
   });
 
   final StatefulForm form;
   final void Function(BuildContext context, StatefulFormState state) listener;
   final Widget Function(BuildContext context, StatefulFormState state) builder;
+  final StatefulFormListenWhen? listenWhen;
+  final StatefulFormBuildWhen? buildWhen;
 
   @override
   Widget build(BuildContext context) {
     return StatefulFormListener(
       form: form,
       listener: listener,
+      listenWhen: listenWhen,
       child: StatefulFormBuilder(
         form: form,
         builder: builder,
+        buildWhen: buildWhen,
       ),
     );
   }
