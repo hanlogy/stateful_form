@@ -73,13 +73,20 @@ class StatefulForm {
     _emitErrors();
   }
 
+  /// Clears all errors.
+  void clearError() {
+    if (_errors.isEmpty) {
+      return;
+    }
+
+    _errors.clear();
+    _emitErrors();
+  }
+
   /// Validates the given [fields]. It will validate all the fields if there is
   /// no given [fields].
   bool validate([List<Type>? fieldTypes]) {
-    if (_errors.isNotEmpty) {
-      _errors.clear();
-      _emitErrors();
-    }
+    clearError();
 
     final fields = fieldTypes == null
         ? _fields
