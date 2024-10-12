@@ -70,6 +70,9 @@ class _StatefulFormListenerState extends State<StatefulFormListener> {
   void initState() {
     super.initState();
 
+    _currentState = _notifier.value;
+    _previousState = _currentState;
+
     _notifier.addListener(_onStateChanged);
   }
 
