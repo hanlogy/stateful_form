@@ -49,6 +49,9 @@ class StatefulForm {
     _addField(field);
   }
 
+  /// Removes the field of type [T].
+  void removeField<T>() => _fields.removeWhere((e) => e.runtimeType == T);
+
   void addFieldIfAbsent(StatefulFormTextField field) {
     if (_fields.contains(field) == false) {
       _addField(field);
