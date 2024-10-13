@@ -130,8 +130,8 @@ class StatefulFormConsumer extends StatelessWidget {
 
 /// A widget that selects a value from a [StatefulForm] and rebuilds when the
 /// selected value changes.
-class StatefulFormSelector<T> extends StatelessWidget {
-  const StatefulFormSelector({
+class StatefulFormBuildOn<T> extends StatelessWidget {
+  const StatefulFormBuildOn({
     super.key,
     required this.form,
     required this.selector,
@@ -155,6 +155,40 @@ class StatefulFormSelector<T> extends StatelessWidget {
       builder: (context, formState) {
         return builder(context, selected ?? selector(formState));
       },
+    );
+  }
+}
+
+/// A widget that selects a value from a [StatefulForm] and calls a callback when
+/// the selected value changes.
+class StatefulFormListenOn<T> extends StatelessWidget {
+  const StatefulFormListenOn({
+    super.key,
+    required this.form,
+    required this.selector,
+    required this.listener,
+    required this.child,
+  });
+
+  final StatefulForm form;
+  final T Function(StatefulFormState state) selector;
+  final void Function(BuildContext context, T selected) listener;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    T? selected;
+
+    return StatefulFormListener(
+      form: form,
+      listenWhen: (previous, current) {
+        selected = selector(current);
+        return selector(previous) != selected;
+      },
+      listener: (context, formState) {
+        listener(context, selected ?? selector(formState));
+      },
+      child: child,
     );
   }
 }
