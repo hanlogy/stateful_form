@@ -127,3 +127,34 @@ class StatefulFormConsumer extends StatelessWidget {
     );
   }
 }
+
+/// A widget that selects a value from a [StatefulForm] and rebuilds when the
+/// selected value changes.
+class StatefulFormSelector<T> extends StatelessWidget {
+  const StatefulFormSelector({
+    super.key,
+    required this.form,
+    required this.selector,
+    required this.builder,
+  });
+
+  final StatefulForm form;
+  final T Function(StatefulFormState state) selector;
+  final Widget Function(BuildContext context, T selected) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    T? selected;
+
+    return StatefulFormBuilder(
+      form: form,
+      buildWhen: (previous, current) {
+        selected = selector(current);
+        return selector(previous) != selected;
+      },
+      builder: (context, formState) {
+        return builder(context, selected ?? selector(formState));
+      },
+    );
+  }
+}
