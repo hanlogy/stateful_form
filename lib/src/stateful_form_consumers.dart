@@ -130,7 +130,7 @@ class StatefulFormConsumer extends StatelessWidget {
 
 /// A widget that selects a value from a [StatefulForm] and rebuilds when the
 /// selected value changes.
-class StatefulFormBuildOn<T> extends StatelessWidget {
+class StatefulFormBuildOn<T> extends StatefulWidget {
   const StatefulFormBuildOn({
     super.key,
     required this.form,
@@ -143,17 +143,22 @@ class StatefulFormBuildOn<T> extends StatelessWidget {
   final Widget Function(BuildContext context, T selected) builder;
 
   @override
-  Widget build(BuildContext context) {
-    T? selected;
+  State<StatefulFormBuildOn<T>> createState() => _StatefulFormBuildOnState<T>();
+}
 
+class _StatefulFormBuildOnState<T> extends State<StatefulFormBuildOn<T>> {
+  late T selected = widget.selector(widget.form._notifier.value);
+
+  @override
+  Widget build(BuildContext context) {
     return StatefulFormBuilder(
-      form: form,
+      form: widget.form,
       buildWhen: (previous, current) {
-        selected = selector(current);
-        return selector(previous) != selected;
+        selected = widget.selector(current);
+        return widget.selector(previous) != selected;
       },
       builder: (context, formState) {
-        return builder(context, selected ?? selector(formState));
+        return widget.builder(context, selected);
       },
     );
   }
@@ -161,7 +166,7 @@ class StatefulFormBuildOn<T> extends StatelessWidget {
 
 /// A widget that selects a value from a [StatefulForm] and calls a callback when
 /// the selected value changes.
-class StatefulFormListenOn<T> extends StatelessWidget {
+class StatefulFormListenOn<T> extends StatefulWidget {
   const StatefulFormListenOn({
     super.key,
     required this.form,
@@ -176,19 +181,25 @@ class StatefulFormListenOn<T> extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    T? selected;
+  State<StatefulFormListenOn<T>> createState() =>
+      _StatefulFormListenOnState<T>();
+}
 
+class _StatefulFormListenOnState<T> extends State<StatefulFormListenOn<T>> {
+  late T selected = widget.selector(widget.form._notifier.value);
+
+  @override
+  Widget build(BuildContext context) {
     return StatefulFormListener(
-      form: form,
+      form: widget.form,
       listenWhen: (previous, current) {
-        selected = selector(current);
-        return selector(previous) != selected;
+        selected = widget.selector(current);
+        return widget.selector(previous) != selected;
       },
       listener: (context, formState) {
-        listener(context, selected ?? selector(formState));
+        widget.listener(context, selected);
       },
-      child: child,
+      child: widget.child,
     );
   }
 }
